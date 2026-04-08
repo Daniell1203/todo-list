@@ -7,6 +7,10 @@ function adicionarTarefa() {
   const li = document.createElement("li");
   li.textContent = input.value;
 
+  li.addEventListener("click", function () {
+    li.remove();
+  });
+
   lista.appendChild(li);
 
   input.value = "";
