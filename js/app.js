@@ -5,12 +5,32 @@ function adicionarTarefa() {
   if (input.value.trim() === "") return;
 
   const li = document.createElement("li");
-  li.textContent = input.value;
 
-  li.addEventListener("click", function () {
+  const span = document.createElement("span");
+  span.textContent = input.value;
+
+  const botao = document.createElement("button");
+  botao.textContent = "❌";
+
+  span.addEventListener("click", function () {
     li.classList.toggle("concluida");
+
+    let tarefas = pegarTarefas();
+    tarefas[tarefas.length - 1].concluida =
+      !tarefas[tarefas.length - 1].concluida;
+    salvarTarefas(tarefas);
   });
 
+  botao.addEventListener("click", function () {
+    li.remove();
+
+    let tarefas = pegarTarefas();
+    tarefas.pop();
+    salvarTarefas(tarefas);
+  });
+
+  li.appendChild(span);
+  li.appendChild(botao);
   lista.appendChild(li);
 
   let tarefas = pegarTarefas();
@@ -29,20 +49,36 @@ function carregarTarefas() {
 
   tarefas.forEach((tarefa, index) => {
     const li = document.createElement("li");
-    li.textContent = tarefa.texto;
+
+    const span = document.createElement("span");
+    span.textContent = tarefa.texto;
+
+    const botao = document.createElement("button");
+    botao.textContent = "❌";
 
     if (tarefa.concluida) {
       li.classList.add("concluida");
     }
 
-    li.addEventListener("click", function () {
+    span.addEventListener("click", function () {
       li.classList.toggle("concluida");
 
       let tarefasAtualizadas = pegarTarefas();
-      tarefasAtualizadas[index].concluida = !tarefasAtualizadas[index].concluida;
+      tarefasAtualizadas[index].concluida =
+        !tarefasAtualizadas[index].concluida;
       salvarTarefas(tarefasAtualizadas);
     });
 
+    botao.addEventListener("click", function () {
+      li.remove();
+
+      let tarefasAtualizadas = pegarTarefas();
+      tarefasAtualizadas.splice(index, 1);
+      salvarTarefas(tarefasAtualizadas);
+    });
+
+    li.appendChild(span);
+    li.appendChild(botao);
     lista.appendChild(li);
   });
 }
