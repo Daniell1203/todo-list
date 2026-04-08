@@ -8,17 +8,16 @@ function adicionarTarefa() {
   li.textContent = input.value;
 
   li.addEventListener("click", function () {
-    li.remove();
-
-    let tarefas = pegarTarefas();
-    tarefas = tarefas.filter(tarefa => tarefa !== li.textContent);
-    salvarTarefas(tarefas);
+    li.classList.toggle("concluida");
   });
 
   lista.appendChild(li);
 
   let tarefas = pegarTarefas();
-  tarefas.push(input.value);
+  tarefas.push({
+    texto: input.value,
+    concluida: false
+  });
   salvarTarefas(tarefas);
 
   input.value = "";
@@ -28,15 +27,19 @@ function carregarTarefas() {
   const tarefas = pegarTarefas();
   const lista = document.getElementById("listaTarefas");
 
-  tarefas.forEach(tarefa => {
+  tarefas.forEach((tarefa, index) => {
     const li = document.createElement("li");
-    li.textContent = tarefa;
+    li.textContent = tarefa.texto;
+
+    if (tarefa.concluida) {
+      li.classList.add("concluida");
+    }
 
     li.addEventListener("click", function () {
-      li.remove();
+      li.classList.toggle("concluida");
 
       let tarefasAtualizadas = pegarTarefas();
-      tarefasAtualizadas = tarefasAtualizadas.filter(t => t !== tarefa);
+      tarefasAtualizadas[index].concluida = !tarefasAtualizadas[index].concluida;
       salvarTarefas(tarefasAtualizadas);
     });
 
